@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.kgc.pet.dao.PetMapper" >
+  <resultMap id="BaseResultMap" type="com.kgc.pet.pojo.Pet" >
+    <id column="petId" property="petid" jdbcType="BIGINT" />
+    <result column="petName" property="petname" jdbcType="VARCHAR" />
+    <result column="petBreed" property="petbreed" jdbcType="INTEGER" />
+    <result column="petSex" property="petsex" jdbcType="INTEGER" />
+    <result column="birthday" property="birthday" jdbcType="TIMESTAMP" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    petId, petName, petBreed, petSex, birthday, description
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.kgc.pet.pojo.PetExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from pet
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from pet
+    where petId = #{petid,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from pet
+    where petId = #{petid,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.kgc.pet.pojo.PetExample" >
+    delete from pet
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.kgc.pet.pojo.Pet" >
+    insert into pet (petId, petName, petBreed, 
+      petSex, birthday, description
+      )
+    values (#{petid,jdbcType=BIGINT}, #{petname,jdbcType=VARCHAR}, #{petbreed,jdbcType=INTEGER}, 
+      #{petsex,jdbcType=INTEGER}, #{birthday,jdbcType=TIMESTAMP}, #{description,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.kgc.pet.pojo.Pet" >
+    insert into pet
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="petid != null" >
+        petId,
+      </if>
+      <if test="petname != null" >
+        petName,
+      </if>
+      <if test="petbreed != null" >
+        petBreed,
+      </if>
+      <if test="petsex != null" >
+        petSex,
+      </if>
+      <if test="birthday != null" >
+        birthday,
+      </if>
+      <if test="description != null" >
+        description,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="petid != null" >
+        #{petid,jdbcType=BIGINT},
+      </if>
+      <if test="petname != null" >
+        #{petname,jdbcType=VARCHAR},
+      </if>
+      <if test="petbreed != null" >
+        #{petbreed,jdbcType=INTEGER},
+      </if>
+      <if test="petsex != null" >
+        #{petsex,jdbcType=INTEGER},
+      </if>
+      <if test="birthday != null" >
+        #{birthday,jdbcType=TIMESTAMP},
+      </if>
+      <if test="description != null" >
+        #{description,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.kgc.pet.pojo.PetExample" resultType="java.lang.Integer" >
+    select count(*) from pet
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update pet
+    <set >
+      <if test="record.petid != null" >
+        petId = #{record.petid,jdbcType=BIGINT},
+      </if>
+      <if test="record.petname != null" >
+        petName = #{record.petname,jdbcType=VARCHAR},
+      </if>
+      <if test="record.petbreed != null" >
+        petBreed = #{record.petbreed,jdbcType=INTEGER},
+      </if>
+      <if test="record.petsex != null" >
+        petSex = #{record.petsex,jdbcType=INTEGER},
+      </if>
+      <if test="record.birthday != null" >
+        birthday = #{record.birthday,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.description != null" >
+        description = #{record.description,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update pet
+    set petId = #{record.petid,jdbcType=BIGINT},
+      petName = #{record.petname,jdbcType=VARCHAR},
+      petBreed = #{record.petbreed,jdbcType=INTEGER},
+      petSex = #{record.petsex,jdbcType=INTEGER},
+      birthday = #{record.birthday,jdbcType=TIMESTAMP},
+      description = #{record.description,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.kgc.pet.pojo.Pet" >
+    update pet
+    <set >
+      <if test="petname != null" >
+        petName = #{petname,jdbcType=VARCHAR},
+      </if>
+      <if test="petbreed != null" >
+        petBreed = #{petbreed,jdbcType=INTEGER},
+      </if>
+      <if test="petsex != null" >
+        petSex = #{petsex,jdbcType=INTEGER},
+      </if>
+      <if test="birthday != null" >
+        birthday = #{birthday,jdbcType=TIMESTAMP},
+      </if>
+      <if test="description != null" >
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where petId = #{petid,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.kgc.pet.pojo.Pet" >
+    update pet
+    set petName = #{petname,jdbcType=VARCHAR},
+      petBreed = #{petbreed,jdbcType=INTEGER},
+      petSex = #{petsex,jdbcType=INTEGER},
+      birthday = #{birthday,jdbcType=TIMESTAMP},
+      description = #{description,jdbcType=VARCHAR}
+    where petId = #{petid,jdbcType=BIGINT}
+  </update>
+</mapper>
