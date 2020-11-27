@@ -1,5 +1,7 @@
 package com.kgc.pet.pojo;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.util.Date;
 
 public class Pet {
@@ -11,6 +13,7 @@ public class Pet {
 
     private Integer petsex;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date birthday;
 
     private String description;
